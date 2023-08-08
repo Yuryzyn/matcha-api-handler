@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors')
 const bodyParser = require('body-parser')
+const fetch = require('cross-fetch')
 
 const app = express();
 app.use(cors());
@@ -36,8 +37,9 @@ app.post('/registration', async (req, res)=> {
         }).then(data => data.text())
         // console.log(data)
         return res.send(data)
-    }catch{
-        return res.send('regster error')
+    }catch(e){
+        console.log(e)
+        return res.json({error: e})
     }
 })
 
@@ -70,7 +72,8 @@ app.post('/karyawan/all', async (req,res) => {
     return res.send(data)
 });
 
-app.post('/karyawan/create', async (req,res) => {   
+app.post('/karyawan/create', async (req,res) => {
+    var credentials =  'Bearer '+ req.body['token']   
     try{
         var data = await fetch(LOGINREGIS + req.path, {
             method: 'POST',
@@ -180,7 +183,7 @@ app.post('/transaksi/baru', async (req,res) => {
             },
             body: JSON.stringify(req.body)
         }).then(data => data.text())
-        console.log(data)
+        // console.log(data)
         return res.json(data)
     }catch(e){
         console.log(e)
@@ -197,7 +200,7 @@ app.post('/transaksi/id::id/edit-status', async (req,res) => {
             },
             body: JSON.stringify(req.body)
         }).then(data => data.text())
-        console.log(data)
+        // console.log(data)
         return res.json(data)
     }catch(e){
         console.log(e)
@@ -214,7 +217,7 @@ app.post('/transaksi/id::id/edit-pengembalian', async (req,res) => {
             },
             body: JSON.stringify(req.body)
         }).then(data => data.text())
-        console.log(data)
+        // console.log(data)
         return res.json(data)
     }catch(e){
         console.log(e)
@@ -233,7 +236,7 @@ app.post('/penyewa/create', async (req,res) => {
         body: JSON.stringify(req.body)
     }).then(data => data.text())
 
-    console.log(data)
+    // console.log(data)
 
     return res.json({status: data})
 })
@@ -295,7 +298,7 @@ app.get('/penyewa/sedang-sewa/:id/:bool', async (req,res) => {
         }) 
         return res.json({})
     }catch(e){
-        console.log(e)
+        // console.log(e)
         return res.json({error: e})
     }
 });
@@ -307,14 +310,15 @@ app.get('/penyewa/hapus-permanen/:id', async (req,res) => {
             headers: {
                 'Content-Type': 'application/json',
             }
-        })
+        }) 
         return res.json({})
     }catch(e){
-        console.log(e)
+        // console.log(e)
         return res.json({error: e})
     }
 });
 
+//---------------------------------------------------------------------------------------------------------------
 
 app.post('/kendaraan/create', async (req,res) => {
     try{
@@ -333,50 +337,80 @@ app.post('/kendaraan/create', async (req,res) => {
 });
 
 app.get('/kendaraan/all', async (req, res) => {
-    var data = await fetch(YURIDAN + req.path, {
-        method: 'GET',
-    }).then(data => data.json())
-    // console.log(data)
-    return res.json(data)
+    try{
+        var data = await fetch(YURIDAN + req.path, {
+            method: 'GET',
+        }).then(data => data.json())
+        // console.log(data)
+        return res.json(data)
+    }catch(e){
+        console.log(e)
+        return res.json({error: e})
+    }
+    
 })
 
 app.get('/kendaraan/super-all', async (req, res) => {
-    var data = await fetch(YURIDAN + req.path, {
-        method: 'GET',
-    }).then(data => data.json())
+    try{
+        var data = await fetch(YURIDAN + req.path, {
+            method: 'GET',
+        }).then(data => data.json())
+        
+        return res.json(data)
+    }catch(e){
+        console.log(e)
+        return res.json({error: e})
+    }
     
-    return res.json(data)
 })
 
 app.get('/kendaraan/log/id::id', async (req, res) => {
-    console.log(req.path)
-    var data = await fetch(YURIDAN + req.path, {
-        method: 'GET',
-    }).then(data => data.json())
-    // console.log(data)
-    return res.json(data)
+    try{
+        // console.log(req.path)
+        var data = await fetch(YURIDAN + req.path, {
+            method: 'GET',
+        }).then(data => data.json())
+        // console.log(data)
+        return res.json(data)
+    }catch(e){
+        console.log(e)
+        return res.json({error: e})
+    }
+    
 })
 
 app.get('/kendaraan/find/id::id', async (req, res) => {
-    console.log(req.path)
-    var data = await fetch(YURIDAN + req.path, {
-        method: 'GET',
-    }).then(data => data.json()).catch(e=>res.send(e))
-    if(data.error){
-        return res.send('error')
+    try{
+        // console.log(req.path)
+        var data = await fetch(YURIDAN + req.path, {
+            method: 'GET',
+        }).then(data => data.json()).catch(e=>res.send(e))
+            if(data.error){
+            return res.send('error')
+        }
+        // console.log(data)
+        return res.json(data)
+    }catch(e){
+        console.log(e)
+        return res.json({error: e})
     }
-    console.log(data)
-    return res.json(data)
+    
 })
 
 
 app.get('/kendaraan/find-global/id::id/v::v', async (req, res) => {
-    console.log(req.path)
-    var data = await fetch(YURIDAN + req.path, {
-        method: 'GET',
-    }).then(data => data.json())
-    console.log(data)
-    return res.json(data)
+    try{
+        // console.log(req.path)
+        var data = await fetch(YURIDAN + req.path, {
+            method: 'GET',
+        }).then(data => data.json())
+        // console.log(data)
+        return res.json(data)
+    }catch(e){
+        console.log(e)
+        return res.json({error: e})
+    }
+    
 })
 
 app.post('/kendaraan/edit', async (req,res) => {
@@ -413,7 +447,7 @@ app.get('/kendaraan/status/:id/:bool', async (req,res) => {
     }
 });
 
-app.get('/kendaraan/hapus/:id', async (req,res) => {
+app.get('/kendaraan/hapus/:id/:bool', async (req,res) => {
     try{
         var data = await fetch(YURIDAN + req.path, {
             method: 'PUT',
